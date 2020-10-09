@@ -65,6 +65,8 @@ extern Robot_Finish_T Robot_Finish_Flag;
 extern LCDCmd_t LCD_Cmd;
 extern CanRxMsg CAN1RxMsg;
 extern CanTxMsg CAN1TxMsg;
+extern int Encoder_Data;
+
 
 void Link_Init(void);
 void CAN1_Init(void);

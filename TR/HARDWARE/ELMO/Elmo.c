@@ -1953,14 +1953,14 @@ static uint32_t f2h(float x)
 void Elmo_Read_POS(uint8_t elmoID)
 {
     //开启TPDO2
-    //RSDO(&elmo[elmoID], 0x1A01, 0x00,1);
-    //Elmo_Delay100us_IDx(&elmo[elmoID],5);
+    RSDO(&elmo[elmoID], 0x1A01, 0x00,1);
+    Elmo_Delay100us_IDx(&elmo[elmoID],50);
     //读取elmo编码器的数值
     RPDO2_Cmd_string(&elmo[elmoID], (uint8_t *)"PX");
     Elmo_Delay100us_IDx(&elmo[elmoID],2);
     //关闭TPDO2
-    //RSDO(&elmo[elmoID], 0x1A01, 0x00,0);
-    //Elmo_Delay100us_IDx(&elmo[elmoID],5);
+    RSDO(&elmo[elmoID], 0x1A01, 0x00,0);
+    Elmo_Delay100us_IDx(&elmo[elmoID],50);
 }
 
 /**

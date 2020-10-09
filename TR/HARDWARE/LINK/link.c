@@ -6,6 +6,8 @@ const u8 WheelInit[2] = {0x66,0x66};
 
 Robot_Finish_T Robot_Finish_Flag = Robot_Wait;
 LCDCmd_t LCD_Cmd = {.Rush_Cmd = false, .Red_Court = false, .Blue_Court = false};
+int Encoder_Data;
+
 
 void Link_Init(void)
 {	
@@ -193,6 +195,14 @@ void CAN1_RX0_IRQHandler(void)
 	OSIntEnter();
 	
 	CAN_Receive(CAN1, CAN_FIFO0, &CAN1RxMsg);
+	
+	//接收到ID为1的EC45的pos
+	if(CAN1RxMsg.StdId == COBID_TSDO + 1)
+		if ((CAN1RxMsg.Data[2]<<8 | CAN1RxMsg.Data[1]) == 0x6064)
+			memcpy(&Encoder_Data, &CAN1RxMsg.Data[4],sizeof(int));
+	
+	
+	
 	
 	/*上层结构心跳包,第一个字节是EC30,第2个字节是M2006*/
 	if((CAN1RxMsg.StdId>=0x35)&&(CAN1RxMsg.StdId<=0x35))
