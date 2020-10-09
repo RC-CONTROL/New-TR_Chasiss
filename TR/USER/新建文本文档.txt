@@ -1,0 +1,4 @@
+//	Elmo_PVM(GO_1_ID   , -RPS2JV(1,GO_1_ID));
+//	Elmo_PVM(GO_2_ID   , -RPS2JV(1,GO_2_ID));
+//	Elmo_PVM(GO_3_ID   , RPS2JV(1,GO_3_ID));
+//	Elmo_PVM(GO_4_ID   , RPS2JV(1,GO_4_ID));

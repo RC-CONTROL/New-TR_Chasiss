@@ -1,0 +1,16 @@
+
+PR/USER/LIMIT_Chassis.uvguix.allen
+PR/USER/LIMIT_Chassis.uvoptx
+PR/USER/LIMIT_Chassis.uvprojx
+*.crf
+*.d
+*.o
+*.lst
+*.dep
+*.htm
+*.hex
+*.htm
+*.map
+*.allen
+*.uvoptx
+*.uvprojx
