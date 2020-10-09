@@ -140,12 +140,14 @@ void SelfCheck_task(void *p_arg)
 		//下面是控制EC45的代码
 	
 		
-		Elmo_PPM(1,3000,30000,POS_REL);
+		//Elmo_PPM(0,-3000,30000,POS_ABS);
 		
 		
 		Elmo_Read_POS(1);
-
-
+		if(firstWheel_pos >= 100000)
+			Elmo_PVM(1,0);
+		else
+			Elmo_PVM(1,3000);
 		delay_ms(10);
 	}
 }

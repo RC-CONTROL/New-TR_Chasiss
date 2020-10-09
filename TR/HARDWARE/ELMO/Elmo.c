@@ -1,6 +1,8 @@
 #include "Elmo.h"
 #include "math.h"
-
+#include "includes.h"	
+#include "delay.h"
+#include "sys.h"
 
 #ifdef ID_0 
   static CANQUEUE QUEUE_CAN_ID0;
@@ -1831,6 +1833,7 @@ static void Elmo_CANSend(CANDATA *pCANDATA)
 */
 static void Elmo_Delay100us_IDx( Elmo *elmo , uint8_t N100us)
 {
+	delay_osschedlock();
     uint16_t tmp_rear;
     switch(elmo->NodeID)
     {
@@ -1907,6 +1910,7 @@ static void Elmo_Delay100us_IDx( Elmo *elmo , uint8_t N100us)
     {
         QUEUE_CAN_IDx->Rear = 0;
     }
+	delay_osschedunlock();
 }
 
 
