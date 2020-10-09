@@ -89,7 +89,7 @@ void SelfCheck_task(void *p_arg)
 	Link_Init();
 	
 	/*elmo 以及TIM7优先级初始化*/
-	//Elmo_Init(CAN1, 2, 2);
+	Elmo_Init(CAN1, 2, 2);
 	
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
@@ -105,6 +105,9 @@ void SelfCheck_task(void *p_arg)
 	
 	u8 i = 4;
 	/*自检循环 单独调试时需要注释循环*/
+	
+	//检测elmo是否调用成功 
+	uint8_t elmo = 0;
 	while(1)
 	{
 		
@@ -119,7 +122,7 @@ void SelfCheck_task(void *p_arg)
 //		}
 //		//因为就这一个设备
 //		if(Chassis.Device[4].HBstatus == false)
-			CAN1_SendMsg(SOSID,Chassis.SOSdata,8);
+//			CAN1_SendMsg(SOSID,Chassis.SOSdata,8);
 //			CAN2_SendMsg(SOSID,Chassis.SOSdata,8);
 //		else
 //		{
@@ -131,6 +134,14 @@ void SelfCheck_task(void *p_arg)
 //    printf("wheel1 = %f   wheel2 = %f  wheel3 = %f  wheel4 = %f\r\n",Chassis.Wheel[0],Chassis.Wheel[1],Chassis.Wheel[2], Chassis.Wheel[3]);
 //    printf("aim_x = %f, aim_y = %f, aim_z = %f\r\n", Chassis.Goal_pos.x, Chassis.Goal_pos.y, Chassis.Goal_pos.z);
 //    printf("now_x = %f, now_y = %f, now_z = %f\r\n", Chassis.Chassis_pos.x, Chassis.Chassis_pos.y, Chassis.Chassis_pos.z);
+
+		//下面是控制EC45的代码
+	
+		Elmo_PPM(3,3000,30000, POS_ABS);
+
+
+
+
 		delay_ms(10);
 	}
 }
