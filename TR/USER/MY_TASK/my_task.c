@@ -90,7 +90,8 @@ void SelfCheck_task(void *p_arg)
 	
 	/*elmo 以及TIM7优先级初始化*/
 	Elmo_Init(CAN1, 2, 2);
-	
+	Elmo_Set_POS(1,0);
+	delay_us(2000);
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
 	
@@ -108,6 +109,7 @@ void SelfCheck_task(void *p_arg)
 	
 	//检测elmo是否调用成功 
 	uint8_t elmo = 0;
+	
 	while(1)
 	{
 		
@@ -137,7 +139,8 @@ void SelfCheck_task(void *p_arg)
 
 		//下面是控制EC45的代码
 	
-		Elmo_Close(1);
+		
+		Elmo_PPM(1,3000,30000,POS_REL);
 		
 		
 		Elmo_Read_POS(1);

@@ -66,7 +66,8 @@ extern LCDCmd_t LCD_Cmd;
 extern CanRxMsg CAN1RxMsg;
 extern CanTxMsg CAN1TxMsg;
 extern int Encoder_Data;
-
+extern u8 Data_Buff[4];
+extern int32_t firstWheel_pos;
 
 void Link_Init(void);
 void CAN1_Init(void);
