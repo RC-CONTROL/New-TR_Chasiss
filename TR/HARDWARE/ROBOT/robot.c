@@ -418,5 +418,15 @@ void LiftBall(void)
 	Elmo_PPM(6, 10000, -15000, POS_REL);
 }
 
+void Kick_Action()
+{
 
+	
+	
+	
+
+
+
+
+}
 

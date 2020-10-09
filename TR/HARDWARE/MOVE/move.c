@@ -186,3 +186,11 @@ void PID_Cal(PID_t *pid, float nextgoal,float goal,float now_val)
 	pid->PID_OUT = pid->P_out + pid->I_out + pid->D_out;
 	pid->PID_OUT = AMP_LIMIT(pid->PID_OUT,pid->Max,pid->Min);
 }
+
+
+
+
+
+
+
+

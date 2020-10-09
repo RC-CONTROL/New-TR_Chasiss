@@ -10,7 +10,8 @@
 
 //标志位 
 TaskFlag_t TaskFlag = Rd2FetLau_1st;
- 
+Kick_t Kick_State1 = Reset;
+Kick_t Kick_State2 = Reset;
 
 Path_t Path_Test= {
 							/*具体的路径点还没有写 到时候把车子沿着路径推一遍就行了*/

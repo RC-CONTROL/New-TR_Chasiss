@@ -145,6 +145,18 @@ typedef struct
 
 
 
+typedef enum
+{
+	Reset,
+	Kick,
+	Stop_Wait,
+
+}Kick_t;
+
+
+
+
+
 extern TaskFlag_t TaskFlag;
 
 
@@ -153,7 +165,8 @@ extern Path_t StraightPathBack;
 extern Path_t Path_Red;
 extern Path_t Path_Blue;
 extern Path_t Path_Test;
-
+extern Kick_t Kick_State1;
+extern Kick_t Kick_State2;
 
 void Set_Goal(PathType_t PathType,int timenow);
 void PathCal(Path_t *Path,OS_ERR err);

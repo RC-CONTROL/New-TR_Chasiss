@@ -90,8 +90,8 @@ void SelfCheck_task(void *p_arg)
 	
 	/*elmo 以及TIM7优先级初始化*/
 	Elmo_Init(CAN1, 2, 2);
-	Elmo_Set_POS(1,0);
-	delay_us(2000);
+	Elmo_Set_POS(1,(int32_t)0);
+
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
 	
@@ -104,50 +104,80 @@ void SelfCheck_task(void *p_arg)
 	/*串口初始化*/
 	uart_init(115200);
 	
-	u8 i = 4;
+//	u8 i = 4;
 	/*自检循环 单独调试时需要注释循环*/
 	
-	//检测elmo是否调用成功 
-	uint8_t elmo = 0;
-	
+	//把elmo的pos改为0
+	Elmo_Set_POS(1,(int32_t)0);
+
 	while(1)
 	{
 		
-//		if(Chassis.ChassisHBstatus == true)
-//		{
-//			for(i=0;i<5;i++)
-//			{
-//				Delay_us(500);
-//				CAN1_SendMsg(MASTERHB_ID+i,Chassis.ChassisHBdata,8);
-//				Chassis.ChassisHBstatus = false;
-//			}
-//		}
-//		//因为就这一个设备
-//		if(Chassis.Device[4].HBstatus == false)
-//			CAN1_SendMsg(SOSID,Chassis.SOSdata,8);
-//			CAN2_SendMsg(SOSID,Chassis.SOSdata,8);
-//		else
-//		{
-//			if(Chassis.Device[i].EC30status == false)
-//			;
-//			if(Chassis.Device[i].M2006status == false)
-//			;
-//		}
-//    printf("wheel1 = %f   wheel2 = %f  wheel3 = %f  wheel4 = %f\r\n",Chassis.Wheel[0],Chassis.Wheel[1],Chassis.Wheel[2], Chassis.Wheel[3]);
-//    printf("aim_x = %f, aim_y = %f, aim_z = %f\r\n", Chassis.Goal_pos.x, Chassis.Goal_pos.y, Chassis.Goal_pos.z);
-//    printf("now_x = %f, now_y = %f, now_z = %f\r\n", Chassis.Chassis_pos.x, Chassis.Chassis_pos.y, Chassis.Chassis_pos.z);
 
-		//下面是控制EC45的代码
-	
+
+		switch(Kick_State1)
+		{
+			case(Reset):
+			{
+				Elmo_PVM(1,-2000);
+				delay_us(200);
+				if(firstWheel_pos<-10000)
+					Kick_State1 = Kick;	
+				break;
+			}
 		
-		//Elmo_PPM(0,-3000,30000,POS_ABS);
+			case(Kick):
+			{
+				Elmo_PTM(1,20);
+				delay_us(200);
+				if(firstWheel_pos>10000)
+					Kick_State1 = Stop_Wait;
+				break;
+			}
+			
+			case(Stop_Wait):
+			{
+				Elmo_PVM(1,0);
+				delay_us(200);
+				if(firstWheel_pos>10000)
+					Kick_State1 = Stop_Wait;
+				break;			
+			}
+			
+		}
+		
+		switch(Kick_State2)
+		{
+			case(Reset):
+			{
+				Elmo_PVM(2,-2000);
+				delay_us(200);
+				if(firstWheel_pos<-10000)
+					Kick_State2 = Kick;	
+				break;
+			}
+		
+			case(Kick):
+			{
+				Elmo_PTM(2,20);
+				delay_us(200);
+				if(firstWheel_pos>10000)
+					Kick_State2 = Stop_Wait;
+				break;
+			}
+			
+			case(Stop_Wait):
+			{
+				Elmo_PVM(2,0);
+				delay_us(200);
+				if(firstWheel_pos>10000)
+					Kick_State2 = Stop_Wait;
+				break;			
+			}
 		
 		
+		}
 		Elmo_Read_POS(1);
-		if(firstWheel_pos >= 100000)
-			Elmo_PVM(1,0);
-		else
-			Elmo_PVM(1,3000);
 		delay_ms(10);
 	}
 }
@@ -157,11 +187,15 @@ void SelfCheck_task(void *p_arg)
 
 void Court_task(void *p_arg)
 {
-	OS_ERR err;
+
 
 	while(1)
 	{
-	//	PathCal(&Path_Test,err);
+		if(KEY1 == 1)
+			Kick_State1 = Reset;
+		if(KEY3 == 2)
+			Kick_State2 = Reset;
+		
 		delay_ms(5);
 	}
 }
@@ -171,10 +205,6 @@ void Loop_task(void *p_arg)
   
 	while(1)
 	{	
-//    Robot_Action(&Path_Test);
-//		Per_Axis_Vel_Cal();										
-//		Wheel_VD_Cal();		
-//		Send_Spd2Wheel();
 		delay_ms(2);
 	}
 }
