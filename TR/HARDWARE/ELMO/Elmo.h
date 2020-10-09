@@ -17,9 +17,9 @@
 #define CAN_ID_DELAY        0x129                           //延时指令
 
 /* ELMO相关参数 */
-#define RATE_CURRENT        20.00                           // 额定电流(A)
-#define PEAK_CURRENT        (20.00*2)                       // 峰值电流(A)
-#define MAX_VOLOCITY        16200                           // 电机最大转速(rpm)
+#define RATE_CURRENT        15.00                           // 额定电流(A)
+#define PEAK_CURRENT        (15.00*2)                       // 峰值电流(A)
+#define MAX_VOLOCITY        10600                           // 电机最大转速(rpm)
 
 /* 保护机制相关参数 */
 #define RATE_CUR            RATE_CURRENT                    // 额定电流(A)          CL[1]
