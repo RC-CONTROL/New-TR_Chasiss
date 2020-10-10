@@ -5,7 +5,7 @@
 const u8 WheelInit[2] = {0x66,0x66};
 u8 Data_Buff[4]={0};
 int32_t firstWheel_pos;
-
+int32_t secondWheel_pos;
 
 Robot_Finish_T Robot_Finish_Flag = Robot_Wait;
 LCDCmd_t LCD_Cmd = {.Rush_Cmd = false, .Red_Court = false, .Blue_Court = false};
@@ -209,7 +209,16 @@ void CAN1_RX0_IRQHandler(void)
 			firstWheel_pos = (u32)Data_Buff[0] + ((u32)Data_Buff[1]<<8) + ((u32)Data_Buff[2]<<16) + ((u32)Data_Buff[3]<<24);
 		
 		}
-
+	//接收到ID为2的EC45的pos
+	if(CAN1RxMsg.StdId == COBID_TPDO2 + 2)
+		{
+			Data_Buff[0] = CAN1RxMsg.Data[4];
+			Data_Buff[1] = CAN1RxMsg.Data[5];
+			Data_Buff[2] = CAN1RxMsg.Data[6];
+			Data_Buff[3] = CAN1RxMsg.Data[7];
+			secondWheel_pos = (u32)Data_Buff[0] + ((u32)Data_Buff[1]<<8) + ((u32)Data_Buff[2]<<16) + ((u32)Data_Buff[3]<<24);
+		
+		}
 		
 	
 	

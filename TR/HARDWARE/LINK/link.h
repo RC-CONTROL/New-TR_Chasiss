@@ -68,7 +68,7 @@ extern CanTxMsg CAN1TxMsg;
 extern int Encoder_Data;
 extern u8 Data_Buff[4];
 extern int32_t firstWheel_pos;
-
+extern int32_t secondWheel_pos;
 void Link_Init(void);
 void CAN1_Init(void);
 void CAN2_Init(void);

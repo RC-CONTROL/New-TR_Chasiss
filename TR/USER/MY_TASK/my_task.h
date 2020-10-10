@@ -48,7 +48,7 @@ void Creat_task(void *p_arg);
 void SelfCheck_task(void *p_arg);
 void Court_task(void *p_arg);
 void Loop_task(void *p_arg);
-
+extern u8 flag;
 /********************************信号量定义***************************/
 TASK_EXT OS_SEM Loop_SEM;
 

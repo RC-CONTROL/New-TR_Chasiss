@@ -66,6 +66,8 @@ void Creat_task(void *p_arg)
 	
 }
 
+u8 flag_kick1 = 1;
+u8 flag_kick2 = 1;
 void SelfCheck_task(void *p_arg)
 {
 	/*底盘变量以及参数的初始化*/
@@ -93,6 +95,7 @@ void SelfCheck_task(void *p_arg)
 	Elmo_Set_POS(1,(int32_t)0);
 	Elmo_Set_POS(2,(int32_t)0);
 	Elmo_PPM( 1,  30000,  10000,  POS_ABS);
+	
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
 	
@@ -112,82 +115,49 @@ void SelfCheck_task(void *p_arg)
 	Elmo_Set_POS(1,(int32_t)0);
 	Elmo_Set_POS(2,(int32_t)0);
 	
-	u8 flag = 0;
+	
+	
 	while(1)
 	{
-		
 
-
-//		switch(Kick_State1)
-//		{
-//			case(Reset):
-//			{
-//				Elmo_PVM(1,-2000);
-//				delay_us(200);
-//				if(firstWheel_pos<=-10000)
-//					Kick_State1 = Stop_Wait;
-//				break;
-//			}
-//		
-//			case(Kick):
-//			{
-//				//Elmo_PTM(1,10);
-//				Elmo_PPM( 1,  30000,  10000,  POS_ABS);
-//				delay_ms(5);
-//				break;
-//			}
-//			
-//			case(Stop_Wait):
-//			{
-//				Elmo_PVM(1,0);
-//				delay_us(200);
-//				
-//				break;			
-//			}
-//			
-//		}
-//		
-//		switch(Kick_State2)
-//		{
-//			case(Reset):
-//			{
-//				Elmo_PVM(2,-2000);
-//				delay_us(200);
-//				if(firstWheel_pos<-10000)
-//					Kick_State2 = Stop_Wait;	
-//				break;
-//			}
-//		
-//			case(Kick):
-//			{
-//				//Elmo_PTM(2,1); 电流过大会导致它根本停不下来 加上负载可能会好一些
-//				Elmo_PVM(2,100000);
-//				delay_us(200);
-//				if(firstWheel_pos>10000)
-//					Kick_State2 = Stop_Wait;
-//				break;
-//			}
-//			
-//			case(Stop_Wait):
-//			{
-//				Elmo_PVM(2,0);
-//				delay_us(200);
-//				
-//				break;			
-//			}
-//		
-//		
-//		}
-		//Elmo_Read_POS(1);
-		
-//		Elmo_PPM( 1,  30000,  10000,  POS_ABS);
-
-		if(flag == 0)
+		switch(Kick_State1)
 		{
-			Elmo_PPM( 1,  30000,  10000,  POS_ABS);
-			flag = 1;
+			case(Reset):
+			{
+				
+				Elmo_PVM( 1,-2000);
+				if(firstWheel_pos <= -10000)
+				{
+					Kick_State1 = Kick;
+					Elmo_PVM( 1,0);
+				}
+				break;
+			}
+		
+			case(Kick):
+			{
+				if(flag_kick1 == 0)
+				{
+					
+					Elmo_PPM( 1,  300000,  10000,  POS_ABS);
+					flag_kick1 = 1;
+					Kick_State1 = Stop_Wait;
+				}
+				break;
+			}
+			
+			case(Stop_Wait):
+			{
+				delay_ms(2000);
+				Kick_State1 = Reset;
+				break;			
+			}
+			
 		}
-		delay_ms(5);
+		
+
+		Elmo_Read_POS(1);
+		delay_ms(50);
 	}
 }
 
@@ -201,11 +171,16 @@ void Court_task(void *p_arg)
 	while(1)
 	{
 		if(KEY1 == 1)
+		{
 			Kick_State1 = Kick;
+			flag_kick1 = 0;
+		}
 		if(KEY3 == 2)
+		{
 			Kick_State2 = Kick;
-		
-		delay_ms(4);
+			flag_kick2 = 0;
+		}
+		delay_ms(40);
 	}
 }
 
@@ -214,6 +189,44 @@ void Loop_task(void *p_arg)
   
 	while(1)
 	{	
-		delay_ms(2);
+		switch(Kick_State2)
+		{
+			case(Reset):
+			{
+				
+				Elmo_PVM( 2,-2000);
+				if(firstWheel_pos <= -10000)
+				{
+					Kick_State2 = Kick;
+					Elmo_PVM(2,0);
+				}
+				break;
+			}
+		
+			case(Kick):
+			{
+				if(flag_kick2 == 0)
+				{
+					
+					Elmo_PPM( 2,  300000,  10000,  POS_ABS);
+					flag_kick2 = 1;
+					Kick_State2 = Stop_Wait;
+				}
+				break;
+			}
+			
+			case(Stop_Wait):
+			{
+				delay_ms(2000);
+				Kick_State2 = Reset;
+				break;			
+			}
+			
+		}
+		
+
+		Elmo_Read_POS(2);
+		
+		delay_ms(35);
 	}
 }

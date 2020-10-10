@@ -532,6 +532,8 @@ uint8_t Elmo_PPM(uint8_t elmoID, uint32_t speed, int32_t position, uint8_t PPMmo
 
         elmo[elmoID-1].CurOPMode = UM_PCM;
 
+		
+	
 
         RPDO2_Cmd_data(&elmo[elmoID], (uint8_t *)"UM", 0, TYPE_INTEGER, UM_PCM);
         Elmo_Delay100us_IDx(&elmo[elmoID],200);
@@ -581,7 +583,7 @@ uint8_t Elmo_PPM(uint8_t elmoID, uint32_t speed, int32_t position, uint8_t PPMmo
     
     /* 运行位置模式 */
     RPDO2_Cmd_string(&elmo[elmoID], (uint8_t *)"BG");
-    Elmo_Delay100us_IDx(&elmo[elmoID],10);
+    Elmo_Delay100us_IDx(&elmo[elmoID],20);
     return 0;
 }
 
