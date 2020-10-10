@@ -91,6 +91,7 @@ void SelfCheck_task(void *p_arg)
 	/*elmo 以及TIM7优先级初始化*/
 	Elmo_Init(CAN1, 2, 2);
 	Elmo_Set_POS(1,(int32_t)0);
+	Elmo_Set_POS(2,(int32_t)0);
 
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
@@ -109,7 +110,8 @@ void SelfCheck_task(void *p_arg)
 	
 	//把elmo的pos改为0
 	Elmo_Set_POS(1,(int32_t)0);
-
+	Elmo_Set_POS(2,(int32_t)0);
+	u8 flag = 0;
 	while(1)
 	{
 		
@@ -121,17 +123,16 @@ void SelfCheck_task(void *p_arg)
 			{
 				Elmo_PVM(1,-2000);
 				delay_us(200);
-				if(firstWheel_pos<-10000)
-					Kick_State1 = Kick;	
+				if(firstWheel_pos<=-10000)
+					Kick_State1 = Stop_Wait;
 				break;
 			}
 		
 			case(Kick):
 			{
-				Elmo_PTM(1,20);
-				delay_us(200);
-				if(firstWheel_pos>10000)
-					Kick_State1 = Stop_Wait;
+				//Elmo_PTM(1,10);
+				Elmo_PPM( 1,  30000,  10000,  POS_ABS);
+				delay_ms(5);
 				break;
 			}
 			
@@ -139,8 +140,7 @@ void SelfCheck_task(void *p_arg)
 			{
 				Elmo_PVM(1,0);
 				delay_us(200);
-				if(firstWheel_pos>10000)
-					Kick_State1 = Stop_Wait;
+				
 				break;			
 			}
 			
@@ -153,13 +153,14 @@ void SelfCheck_task(void *p_arg)
 				Elmo_PVM(2,-2000);
 				delay_us(200);
 				if(firstWheel_pos<-10000)
-					Kick_State2 = Kick;	
+					Kick_State2 = Stop_Wait;	
 				break;
 			}
 		
 			case(Kick):
 			{
-				Elmo_PTM(2,20);
+				//Elmo_PTM(2,1); 电流过大会导致它根本停不下来 加上负载可能会好一些
+				Elmo_PVM(2,100000);
 				delay_us(200);
 				if(firstWheel_pos>10000)
 					Kick_State2 = Stop_Wait;
@@ -170,15 +171,14 @@ void SelfCheck_task(void *p_arg)
 			{
 				Elmo_PVM(2,0);
 				delay_us(200);
-				if(firstWheel_pos>10000)
-					Kick_State2 = Stop_Wait;
+				
 				break;			
 			}
 		
 		
 		}
 		Elmo_Read_POS(1);
-		delay_ms(10);
+		delay_ms(5);
 	}
 }
 
@@ -192,11 +192,11 @@ void Court_task(void *p_arg)
 	while(1)
 	{
 		if(KEY1 == 1)
-			Kick_State1 = Reset;
+			Kick_State1 = Kick;
 		if(KEY3 == 2)
-			Kick_State2 = Reset;
+			Kick_State2 = Kick;
 		
-		delay_ms(5);
+		delay_ms(4);
 	}
 }
 

@@ -528,8 +528,13 @@ uint8_t Elmo_PPM(uint8_t elmoID, uint32_t speed, int32_t position, uint8_t PPMmo
             RPDO2_Cmd_data(&elmo[elmoID], (uint8_t *)"MO", 0, TYPE_INTEGER, MO_OFF);
             Elmo_Delay100us_IDx(&elmo[elmoID],90);
         }
+		
 
-        elmo[elmoID].CurOPMode = UM_PCM;
+        elmo[elmoID-1].CurOPMode = UM_PCM;
+
+		
+		Elmo_Delay100us_IDx(&elmo[elmoID],5);
+
         RPDO2_Cmd_data(&elmo[elmoID], (uint8_t *)"UM", 0, TYPE_INTEGER, UM_PCM);
         Elmo_Delay100us_IDx(&elmo[elmoID],200);
 
