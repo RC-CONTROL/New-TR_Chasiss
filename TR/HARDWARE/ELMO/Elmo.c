@@ -532,8 +532,6 @@ uint8_t Elmo_PPM(uint8_t elmoID, uint32_t speed, int32_t position, uint8_t PPMmo
 
         elmo[elmoID-1].CurOPMode = UM_PCM;
 
-		
-		Elmo_Delay100us_IDx(&elmo[elmoID],5);
 
         RPDO2_Cmd_data(&elmo[elmoID], (uint8_t *)"UM", 0, TYPE_INTEGER, UM_PCM);
         Elmo_Delay100us_IDx(&elmo[elmoID],200);
@@ -1838,7 +1836,6 @@ static void Elmo_CANSend(CANDATA *pCANDATA)
 */
 static void Elmo_Delay100us_IDx( Elmo *elmo , uint8_t N100us)
 {
-	delay_osschedlock();
     uint16_t tmp_rear;
     switch(elmo->NodeID)
     {
@@ -1915,7 +1912,6 @@ static void Elmo_Delay100us_IDx( Elmo *elmo , uint8_t N100us)
     {
         QUEUE_CAN_IDx->Rear = 0;
     }
-	delay_osschedunlock();
 }
 
 

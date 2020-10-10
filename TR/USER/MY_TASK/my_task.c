@@ -92,7 +92,7 @@ void SelfCheck_task(void *p_arg)
 	Elmo_Init(CAN1, 2, 2);
 	Elmo_Set_POS(1,(int32_t)0);
 	Elmo_Set_POS(2,(int32_t)0);
-
+	Elmo_PPM( 1,  30000,  10000,  POS_ABS);
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
 	
@@ -111,73 +111,82 @@ void SelfCheck_task(void *p_arg)
 	//把elmo的pos改为0
 	Elmo_Set_POS(1,(int32_t)0);
 	Elmo_Set_POS(2,(int32_t)0);
+	
 	u8 flag = 0;
 	while(1)
 	{
 		
 
 
-		switch(Kick_State1)
+//		switch(Kick_State1)
+//		{
+//			case(Reset):
+//			{
+//				Elmo_PVM(1,-2000);
+//				delay_us(200);
+//				if(firstWheel_pos<=-10000)
+//					Kick_State1 = Stop_Wait;
+//				break;
+//			}
+//		
+//			case(Kick):
+//			{
+//				//Elmo_PTM(1,10);
+//				Elmo_PPM( 1,  30000,  10000,  POS_ABS);
+//				delay_ms(5);
+//				break;
+//			}
+//			
+//			case(Stop_Wait):
+//			{
+//				Elmo_PVM(1,0);
+//				delay_us(200);
+//				
+//				break;			
+//			}
+//			
+//		}
+//		
+//		switch(Kick_State2)
+//		{
+//			case(Reset):
+//			{
+//				Elmo_PVM(2,-2000);
+//				delay_us(200);
+//				if(firstWheel_pos<-10000)
+//					Kick_State2 = Stop_Wait;	
+//				break;
+//			}
+//		
+//			case(Kick):
+//			{
+//				//Elmo_PTM(2,1); 电流过大会导致它根本停不下来 加上负载可能会好一些
+//				Elmo_PVM(2,100000);
+//				delay_us(200);
+//				if(firstWheel_pos>10000)
+//					Kick_State2 = Stop_Wait;
+//				break;
+//			}
+//			
+//			case(Stop_Wait):
+//			{
+//				Elmo_PVM(2,0);
+//				delay_us(200);
+//				
+//				break;			
+//			}
+//		
+//		
+//		}
+		//Elmo_Read_POS(1);
+		
+//		Elmo_PPM( 1,  30000,  10000,  POS_ABS);
+
+		if(flag == 0)
 		{
-			case(Reset):
-			{
-				Elmo_PVM(1,-2000);
-				delay_us(200);
-				if(firstWheel_pos<=-10000)
-					Kick_State1 = Stop_Wait;
-				break;
-			}
-		
-			case(Kick):
-			{
-				//Elmo_PTM(1,10);
-				Elmo_PPM( 1,  30000,  10000,  POS_ABS);
-				delay_ms(5);
-				break;
-			}
-			
-			case(Stop_Wait):
-			{
-				Elmo_PVM(1,0);
-				delay_us(200);
-				
-				break;			
-			}
-			
+			Elmo_PPM( 1,  30000,  10000,  POS_ABS);
+			flag = 1;
 		}
-		
-		switch(Kick_State2)
-		{
-			case(Reset):
-			{
-				Elmo_PVM(2,-2000);
-				delay_us(200);
-				if(firstWheel_pos<-10000)
-					Kick_State2 = Stop_Wait;	
-				break;
-			}
-		
-			case(Kick):
-			{
-				//Elmo_PTM(2,1); 电流过大会导致它根本停不下来 加上负载可能会好一些
-				Elmo_PVM(2,100000);
-				delay_us(200);
-				if(firstWheel_pos>10000)
-					Kick_State2 = Stop_Wait;
-				break;
-			}
-			
-			case(Stop_Wait):
-			{
-				Elmo_PVM(2,0);
-				delay_us(200);
-				
-				break;			
-			}
-		
-		
-		}
-		Elmo_Read_POS(1);
 		delay_ms(5);
 	}
 }
