@@ -138,7 +138,7 @@ void SelfCheck_task(void *p_arg)
 				if(KEY1 == 1)
 				{
 					
-					Elmo_PPM( 1,  300000,  10000,  POS_ABS);				
+					Elmo_PPM( 1,  200000,  10000,  POS_ABS);				
 					flag_kick1 = 1;
 					Kick_State1 = Stop_Wait;
 					delay_us(20000);
@@ -157,7 +157,7 @@ void SelfCheck_task(void *p_arg)
 		
 
 		Elmo_Read_POS(1);
-		delay_ms(40);
+		delay_ms(10);
 	}
 }
 
@@ -195,10 +195,11 @@ void Loop_task(void *p_arg)
 			{
 				
 				Elmo_PVM( 2,8000);
-				if(secondWheel_pos >= 10000)
+				if(secondWheel_pos >=  10000)
 				{
 					Kick_State2 = Kick;
 					Elmo_PVM(2,0);
+					delay_us(200);
 				}
 				break;
 			}
@@ -208,10 +209,11 @@ void Loop_task(void *p_arg)
 				if(KEY3 == 1)
 				{
 					
-					Elmo_PPM( 2,  -300000,  -10000,  POS_ABS);
+					Elmo_PPM( 2,  (int32_t)(300000),  -10000,  POS_ABS);
 					flag_kick2 = 1;
 					Kick_State2 = Stop_Wait;
 					delay_us(20000);
+					
 				}
 				break;
 			}
@@ -228,6 +230,6 @@ void Loop_task(void *p_arg)
 
 		Elmo_Read_POS(2);
 		
-		delay_ms(35);
+		delay_ms(8);
 	}
 }
