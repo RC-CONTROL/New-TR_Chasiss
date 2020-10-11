@@ -1,7 +1,7 @@
 #include "my_task.h"
 
 int main(void)
-{
++{
 	OS_ERR err;
 	CPU_SR_ALLOC();
 	delay_init(168);
