@@ -199,8 +199,8 @@ void CAN1_RX0_IRQHandler(void)
 	
 	CAN_Receive(CAN1, CAN_FIFO0, &CAN1RxMsg);
 	
-	//接收到ID为1的EC45的pos
-	if(CAN1RxMsg.StdId == COBID_TPDO2 + 1)
+	//接收到ID为5的EC45的pos
+	if(CAN1RxMsg.StdId == COBID_TPDO2 + 5)
 		{
 			Data_Buff[0] = CAN1RxMsg.Data[4];
 			Data_Buff[1] = CAN1RxMsg.Data[5];

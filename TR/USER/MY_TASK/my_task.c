@@ -92,8 +92,7 @@ void SelfCheck_task(void *p_arg)
 	
 	/*elmo 以及TIM7优先级初始化*/
 	Elmo_Init(CAN1, 2, 2);
-	Elmo_Set_POS(1,(int32_t)0);
-	Elmo_Set_POS(2,(int32_t)0);
+	Elmo_Set_POS(5,(int32_t)0);
 	
 	/*每300ms发送底盘底盘心跳*/
 	TIM6_Init();
@@ -111,10 +110,8 @@ void SelfCheck_task(void *p_arg)
 	/*自检循环 单独调试时需要注释循环*/
 	
 	//把elmo的pos改为0
-	Elmo_Set_POS(1,(int32_t)0);
-	Elmo_Set_POS(2,(int32_t)0);
-//	Elmo_PPM( 1,  30000,  10000,  POS_ABS);
-//	Elmo_PPM( 2,  30000,  10000,  POS_ABS);	
+	Elmo_Set_POS(5,(int32_t)0);
+	Elmo_PPM( 5,8000,10000,POS_REL);
 	
 	while(1)
 	{
@@ -124,12 +121,9 @@ void SelfCheck_task(void *p_arg)
 			case(Reset):
 			{
 				
-				Elmo_PVM( 1,-8000);
-				if(firstWheel_pos <= -10000)
-				{
-					Kick_State1 = Kick;
-					Elmo_PVM( 1,0);
-				}
+				Elmo_PPM( 5,8000,10000,POS_REL);
+				delay_us(20000);
+				Kick_State1 = Kick;
 				break;
 			}
 		
@@ -138,25 +132,27 @@ void SelfCheck_task(void *p_arg)
 				if(KEY1 == 1)
 				{
 					
-					Elmo_PPM( 1,  150000,  10000,  POS_ABS);				
-					flag_kick1 = 1;
+					Elmo_PPM( 5,  (int32_t)160000,  -20000,  POS_REL);		
+					
+					delay_ms(270);
 					Kick_State1 = Stop_Wait;
-					delay_us(20000);
 				}
 				break;
 			}
 			
 			case(Stop_Wait):
 			{
-				delay_ms(2000);
-				Kick_State1 = Reset;
+				Elmo_Close(5);
+				delay_us(20000);
+				if(KEY3 == 1)
+					Kick_State1 = Reset;
 				break;			
 			}
 			
 		}
 		
 
-		Elmo_Read_POS(1);
+		//Elmo_Read_POS(5);
 		delay_ms(10);
 	}
 }
@@ -170,17 +166,27 @@ void Court_task(void *p_arg)
 
 	while(1)
 	{
-//		if(KEY1 == 1)
+		/*手柄模式*/
+//		PS2_Read();
+//		Button_React();
+//		Mannal_PID();
+		
+		
+		/*向着第三象限走*/
+//		Chassis.Chassis_pid_x.PID_OUT = -10;
+//		Chassis.Chassis_pid_y.PID_OUT = -10;
+//		Chassis.Chassis_pid_z.PID_OUT = 0;
+		
+//		if(Kick_State1 == Kick)
 //		{
-//			Kick_State1 = Kick;
-//			flag_kick1 = 0;
+//			Chassis.Chassis_pid_x.PID_OUT = 0;
+//			Chassis.Chassis_pid_y.PID_OUT = 100;
+//			Chassis.Chassis_pid_z.PID_OUT = 0;
 //		}
-//		if(KEY3 == 1)
-//		{
-//			Kick_State2 = Kick;
-//			flag_kick2 = 0;
-//		}
-		delay_ms(40);
+		
+		Wheel_VD_Cal();
+		Send_Spd2Wheel();
+		delay_ms(5);
 	}
 }
 
@@ -189,46 +195,46 @@ void Loop_task(void *p_arg)
   
 	while(1)
 	{	
-		switch(Kick_State2)
-		{
-			case(Reset):
-			{
-				
-				Elmo_PVM( 2,8000);
-				if(secondWheel_pos >=  10000)
-				{
-					Kick_State2 = Kick;
-					Elmo_PVM(2,0);
-					delay_us(200);
-				}
-				break;
-			}
-		
-			case(Kick):
-			{
-				if(KEY3 == 1)
-				{
-					
-					Elmo_PPM( 2,  (int32_t)(30000),  -10000,  POS_ABS);
-					flag_kick2 = 1;
-					Kick_State2 = Stop_Wait;
-					delay_us(20000);
-					
-				}
-				break;
-			}
-			
-			case(Stop_Wait):
-			{
-				delay_ms(2000);
-				Kick_State2 = Reset;
-				break;			
-			}
-			
-		}
-		
+//		switch(Kick_State2)
+//		{
+//			case(Reset):
+//			{
+//				
+//				Elmo_PVM( 2,8000);
+//				if(secondWheel_pos >=  10000)
+//				{
+//					Kick_State2 = Kick;
+//					Elmo_PVM(2,0);
+//					delay_us(200);
+//				}
+//				break;
+//			}
+//		
+//			case(Kick):
+//			{
+//				if(KEY3 == 1)
+//				{
+//					
+//					Elmo_PPM( 2,  (int32_t)(30000),  -10000,  POS_ABS);
+//					flag_kick2 = 1;
+//					Kick_State2 = Stop_Wait;
+//					delay_us(20000);
+//					
+//				}
+//				break;
+//			}
+//			
+//			case(Stop_Wait):
+//			{
+//				delay_ms(2000);
+//				Kick_State2 = Reset;
+//				break;			
+//			}
+//			
+//		}
+//		
 
-		Elmo_Read_POS(2);
+//		Elmo_Read_POS(2);
 		
 		delay_ms(8);
 	}
