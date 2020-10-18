@@ -15,7 +15,7 @@ typedef struct
 	
 }PHASE_T;
 
-#define mode_follow 1
+#define mode_follow 0
 
 #define Full_Speed	2000	//(mm/5ms)
 #define Full_Shift	0.02

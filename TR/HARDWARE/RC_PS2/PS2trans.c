@@ -23,6 +23,9 @@ void Mannal_PID(void)
 	*Chassis.Vel_x = Vx;
 	*Chassis.Vel_y = Vy;
 	
+	Chassis.Chassis_pid_x.PID_OUT = (int)Vx;
+	Chassis.Chassis_pid_y.PID_OUT = (int)Vy;
+	
 #endif
 	
 	

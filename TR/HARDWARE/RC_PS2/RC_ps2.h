@@ -11,10 +11,16 @@
 /*对外接口,修改IO口，并在PS2_Init函数中加入对应的时钟使能函数即可*/
 #define DO_GPIOX	GPIOD
 #define DO_PIN		GPIO_Pin_5
+
+
 #define DI_GPIOX	GPIOD
 #define DI_PIN		GPIO_Pin_6
+
+
 #define CS_GPIOX	GPIOB
 #define CS_PIN		GPIO_Pin_6
+
+
 #define CLK_GPIOX	GPIOB
 #define CLK_PIN		GPIO_Pin_7
 
