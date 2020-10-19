@@ -4,11 +4,11 @@ PHASE_T phase={1,1};
 
 void Mannal_PID(void)
 {	
-	float Vx,Vy;
+	float Vx,Vy,Vz;
 	
 	Vx = VPhase_Create(DIR_X,PS2_T.PSS_LXf);	//就算出X,Y方向对应的速度
 	Vy = VPhase_Create(DIR_Y,PS2_T.PSS_LYf);
-	Chassis.Goal_pos.z += 0.2f*PS2_T.PSS_RXf;	//方向定义未调整
+	Vz = 0.2f*PS2_T.PSS_RXf;	//方向定义未调整
 	
 #if mode_follow		//位置跟随 
 	
@@ -20,8 +20,11 @@ void Mannal_PID(void)
 #else 
 	Chassis.Ff_Pos=Chassis.Goal_pos;
 	Per_Axis_Vel_Cal();
-	*Chassis.Vel_x = Vx;
-	*Chassis.Vel_y = Vy;
+//	*Chassis.Vel_x = Vx;
+//	*Chassis.Vel_y = Vy;
+	Chassis.Chassis_pid_x.PID_OUT = (int)Vx;
+	Chassis.Chassis_pid_y.PID_OUT = (int)Vy;
+	Chassis.Chassis_pid_z.PID_OUT = (int)Vz;
 	
 #endif
 	

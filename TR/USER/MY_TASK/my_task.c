@@ -104,7 +104,7 @@ void SelfCheck_task(void *p_arg)
 //	HandshakeInit();
 	
 	/*串口初始化*/
-	uart_init(115200);
+	//uart_init(115200);
 	
 //	u8 i = 4;
 	/*自检循环 单独调试时需要注释循环*/
@@ -115,7 +115,11 @@ void SelfCheck_task(void *p_arg)
 	
 	while(1)
 	{
-
+		/*手柄模式*/
+		PS2_Read();
+		Button_React();
+		Mannal_PID();
+		
 		switch(Kick_State1)
 		{
 			case(Reset):
@@ -129,13 +133,13 @@ void SelfCheck_task(void *p_arg)
 		
 			case(Kick):
 			{
-				if(KEY1 == 1)
+				if((PS2_T.YY_Data&0x20)==0)
 				{
 					
-					Elmo_PPM( 5,  (int32_t)160000,  -20000,  POS_REL);		
-					
-					delay_ms(270);
+					Elmo_PPM( 5,  (int32_t)180000,  -41000,  POS_REL);		
 					Kick_State1 = Stop_Wait;
+					delay_ms(250);
+					
 				}
 				break;
 			}
@@ -144,7 +148,7 @@ void SelfCheck_task(void *p_arg)
 			{
 				Elmo_Close(5);
 				delay_us(20000);
-				if(KEY3 == 1)
+				if((PS2_T.YY_Data&0x80)==0)
 					Kick_State1 = Reset;
 				break;			
 			}
@@ -184,8 +188,8 @@ void Court_task(void *p_arg)
 //			Chassis.Chassis_pid_z.PID_OUT = 0;
 //		}
 //		
-//		Wheel_VD_Cal();
-//		Send_Spd2Wheel();
+		Wheel_VD_Cal();
+		Send_Spd2Wheel();
 		delay_ms(5);
 	}
 }
