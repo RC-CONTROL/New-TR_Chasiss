@@ -116,10 +116,10 @@ void SelfCheck_task(void *p_arg)
 	while(1)
 	{
 		/*手柄模式*/
-		PS2_Read();
-		Button_React();
-		Mannal_PID();
-		
+//		PS2_Read();
+//		Button_React();
+//		Mannal_PID();
+//		
 		switch(Kick_State1)
 		{
 			case(Reset):
@@ -157,7 +157,7 @@ void SelfCheck_task(void *p_arg)
 		
 
 		//Elmo_Read_POS(5);
-		delay_ms(10);
+		delay_ms(20);
 	}
 }
 
@@ -171,9 +171,9 @@ void Court_task(void *p_arg)
 	while(1)
 	{
 		/*手柄模式*/
-//		PS2_Read();
-//		Button_React();
-//		Mannal_PID();
+		PS2_Read();
+		Button_React();
+		Mannal_PID();
 		
 		
 		/*向着第三象限走*/
@@ -190,7 +190,7 @@ void Court_task(void *p_arg)
 //		
 		Wheel_VD_Cal();
 		Send_Spd2Wheel();
-		delay_ms(5);
+		delay_ms(15);
 	}
 }
 

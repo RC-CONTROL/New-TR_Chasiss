@@ -15,12 +15,12 @@ Section Cross References
     main.o(.text) refers to my_task.o(.text) for Creat_task
     system_stm32f4xx.o(.text) refers to system_stm32f4xx.o(.data) for SystemCoreClock
     my_task.o(.text) refers to delay.o(.text) for delay_ms
+    my_task.o(.text) refers to rc_ps2.o(.text) for PS2_Read
+    my_task.o(.text) refers to ps2trans.o(.text) for Button_React
     my_task.o(.text) refers to move.o(.text) for Wheel_VD_Cal
     my_task.o(.text) refers to hardware.o(.text) for RGB_Init
     my_task.o(.text) refers to link.o(.text) for Link_Init
     my_task.o(.text) refers to elmo.o(.text) for Elmo_Init
-    my_task.o(.text) refers to rc_ps2.o(.text) for PS2_Read
-    my_task.o(.text) refers to ps2trans.o(.text) for Button_React
     my_task.o(.text) refers to cpu_core.o(.text) for CPU_Init
     my_task.o(.text) refers to cpu_a.o(.text) for CPU_SR_Save
     my_task.o(.text) refers to os_task.o(.text) for OSTaskCreate
@@ -1135,8 +1135,8 @@ Image Symbol Table
     SystemInit                               0x0800045d   Thumb Code    88  system_stm32f4xx.o(.text)
     SystemCoreClockUpdate                    0x080004b5   Thumb Code   174  system_stm32f4xx.o(.text)
     Loop_task                                0x08000591   Thumb Code    10  my_task.o(.text)
-    Court_task                               0x0800059b   Thumb Code    18  my_task.o(.text)
-    SelfCheck_task                           0x080005ad   Thumb Code   214  my_task.o(.text)
+    Court_task                               0x0800059b   Thumb Code    30  my_task.o(.text)
+    SelfCheck_task                           0x080005b9   Thumb Code   202  my_task.o(.text)
     Creat_task                               0x08000683   Thumb Code   320  my_task.o(.text)
     wait                                     0x08000831   Thumb Code    10  time.o(.text)
     CAN2_Init                                0x0800083d   Thumb Code   248  link.o(.text)
